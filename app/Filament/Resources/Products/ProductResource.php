@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Resources\Products\RelationManagers\PricesRelationManager;
 
 class ProductResource extends Resource
 {
@@ -36,10 +37,11 @@ class ProductResource extends Resource
         return ProductsTable::configure($table);
     }
 
+
     public static function getRelations(): array
     {
         return [
-            //
+            PricesRelationManager::class,
         ];
     }
 

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('presentation')->nullable();
             $table->string('abreviation')->nullable();
-            $table->decimal('price', 8, 2);
             $table->integer('stock')->default(0);
             $table->timestamps();
         });
