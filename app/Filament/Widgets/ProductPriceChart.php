@@ -3,24 +3,27 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
+use Filament\Widgets\Concerns\InteractsWithPageFilters; // 🚀 REQUISITO DE LA DOC
 use App\Models\Product;
 use App\Models\Price;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductPriceChart extends ChartWidget
 {
-    use HasFiltersForm; // Escucha los filtros globales
+    // 🚀 Cambiamos el trait para escuchar correctamente a la página del Dashboard
+    use InteractsWithPageFilters; 
 
     protected ?string $heading = 'Evolución del Precio';
     protected int | string | array $columnSpan = '2';
     protected ?string $maxHeight = '150px';
     protected static ?int $sort = 2;
+
     protected function getData(): array
     {
-        $filters = $this->getFilters();
-        $productId = $filters['product_id'] ?? null;
-        $startDate = $filters['start_date'] ?? null;
-        $endDate = $filters['end_date'] ?? null;
+        // 🚀 Leemos los filtros desde la propiedad nativa '$this->pageFilters'
+        $productId = $this->pageFilters['product_id'] ?? null;
+        $startDate = $this->pageFilters['start_date'] ?? null;
+        $endDate = $this->pageFilters['end_date'] ?? null;
 
         // Si no hay producto seleccionado, tomamos el primero por defecto
         if (!$productId) {
@@ -34,8 +37,8 @@ class ProductPriceChart extends ChartWidget
 
         // Consultamos aplicando el filtro de producto y el rango de fechas opcional
         $prices = Price::where('product_id', $productId)
-            ->when($startDate, fn($q) => $q->where('effective_date', '>=', $startDate))
-            ->when($endDate, fn($q) => $q->where('effective_date', '<=', $endDate))
+            ->when($startDate, fn(Builder $q) => $q->whereDate('effective_date', '>=', $startDate))
+            ->when($endDate, fn(Builder $q) => $q->whereDate('effective_date', '<=', $endDate))
             ->orderBy('effective_date', 'asc')
             ->take(30)
             ->get();
@@ -71,6 +74,7 @@ class ProductPriceChart extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'maintainAspectRatio' => false, // Importante para que respete tu max-height
             'elements' => [
                 'line' => [
                     'tension' => 0.4,

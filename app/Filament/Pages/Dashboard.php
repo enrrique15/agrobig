@@ -18,24 +18,31 @@ class Dashboard extends BaseDashboard
     }
     use HasFiltersForm;
 
-   /* public function filtersForm(Schema $schema): Schema
+    public function filtersForm(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Select::make('product_id')
-                    ->label('Producto')
-                    ->options(Product::pluck('name', 'id'))
-                    ->default(fn() => Product::first()?->id) 
-                    ->searchable(),
+                Section::make()
+                    ->schema([
+                        Select::make('product_id')
+                            ->label('Producto')
+                            ->options(Product::pluck('name', 'id'))
+                            ->default(fn() => Product::first()?->id)
+                            ->live()
+                            ->searchable(),
 
-                DatePicker::make('start_date')
-                    ->label('Desde')
-                    ->maxDate(now()),
+                        DatePicker::make('start_date')
+                            ->label('Desde')
+                            ->maxDate(now())
+                            ->live(),
 
-                DatePicker::make('end_date')
-                    ->label('Hasta')
-                    ->maxDate(now()),
-            ])
-            ->columns(2);
-    }*/
+                        DatePicker::make('end_date')
+                            ->label('Hasta')
+                            ->maxDate(now())
+                            ->live(),
+                    ])
+                    ->columns(3)
+                    ->columnSpan('full'),
+            ]);
+    }
 }

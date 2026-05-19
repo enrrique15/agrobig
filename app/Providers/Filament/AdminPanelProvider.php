@@ -48,14 +48,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                // 1. Primero se pintará la tarjeta de totales (Estilo IAF Bolivia)
-            \App\Filament\Widgets\ProductPriceMockup::class, 
-            
-            // 2. Segundo se pintará la gráfica de evolución
-            \App\Filament\Widgets\ProductPriceChart::class, 
-            
-            // 3. Al final se pintará la tabla interactiva de productos
-            \App\Filament\Widgets\ProductPriceTableList::class,
             ])
             ->middleware([
                 EncryptCookies::class,
