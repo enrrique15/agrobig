@@ -3,23 +3,24 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use App\Models\Product;
 use App\Models\Price;
 
 class ProductPriceChart extends ChartWidget
 {
+    use HasFiltersForm; // Escucha los filtros globales
+
     protected ?string $heading = 'Evolución del Precio';
-    protected int | string | array $columnSpan = 'full';
-
-    protected function getFilters(): ?array
-    {
-        return Product::pluck('name', 'id')->toArray();
-    }
-
+    protected int | string | array $columnSpan = '2';
+    protected ?string $maxHeight = '250px';
+    protected static ?int $sort = 2;
     protected function getData(): array
     {
-        // Obtenemos el ID del producto seleccionado en el filtro
-        $productId = $this->filter;
+        $filters = $this->getFilters();
+        $productId = $filters['product_id'] ?? null;
+        $startDate = $filters['start_date'] ?? null;
+        $endDate = $filters['end_date'] ?? null;
 
         // Si no hay producto seleccionado, tomamos el primero por defecto
         if (!$productId) {
@@ -27,26 +28,22 @@ class ProductPriceChart extends ChartWidget
             $productId = $product ? $product->id : null;
         }
 
-        // Si no hay productos en absoluto, devolvemos un array vacío
         if (!$productId) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+            return ['datasets' => [], 'labels' => []];
         }
 
-        // Buscamos los precios de ese producto ordenados cronológicamente por tu columna custom
+        // Consultamos aplicando el filtro de producto y el rango de fechas opcional
         $prices = Price::where('product_id', $productId)
+            ->when($startDate, fn($q) => $q->where('effective_date', '>=', $startDate))
+            ->when($endDate, fn($q) => $q->where('effective_date', '<=', $endDate))
             ->orderBy('effective_date', 'asc')
             ->take(30)
             ->get();
 
-        // Preparamos los datos para Chart.js
         $data = $prices->pluck('price')->toArray();
         
-        // Corrección de la conversión: nos aseguramos de transformar el string de la BD a Carbon
         $labels = $prices->pluck('effective_date')->map(function ($date) {
-            return $date->format('d M'); 
+            return $date->format('d M Y'); 
         })->toArray();
 
         return [
@@ -55,8 +52,8 @@ class ProductPriceChart extends ChartWidget
                     'label' => 'Precio (Bs)',
                     'data' => $data,
                     'fill' => 'start',
-                    'backgroundColor' => 'rgba(34, 197, 94, 0.15)', // Tono verde traslúcido
-                    'borderColor' => 'rgb(22, 163, 74)',         // Línea verde sólida
+                    'backgroundColor' => 'rgba(34, 197, 94, 0.15)',
+                    'borderColor' => 'rgb(22, 163, 74)',
                     'borderWidth' => 2,
                     'pointBackgroundColor' => 'rgb(22, 163, 74)',
                     'pointRadius' => 3,
@@ -76,12 +73,12 @@ class ProductPriceChart extends ChartWidget
         return [
             'elements' => [
                 'line' => [
-                    'tension' => 0.4, // Suavizado de curvas
+                    'tension' => 0.4,
                 ],
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => false, // Ajuste automático al rango de precios real
+                    'beginAtZero' => false,
                     'grid' => [
                         'color' => 'rgba(0,0,0,0.05)',
                     ],
