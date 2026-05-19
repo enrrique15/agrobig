@@ -13,7 +13,7 @@ class ProductPriceChart extends ChartWidget
 
     protected ?string $heading = 'Evolución del Precio';
     protected int | string | array $columnSpan = '2';
-    protected ?string $maxHeight = '250px';
+    protected ?string $maxHeight = '150px';
     protected static ?int $sort = 2;
     protected function getData(): array
     {
