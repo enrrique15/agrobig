@@ -26,37 +26,34 @@ class ProductPriceTableList extends TableWidget
                     ->circular(),
                 TextColumn::make('abreviation')
                     ->label('Abreviación')
-                    ->searchable()
+
                     ->sortable(),
-                TextColumn::make('name')
-                    ->searchable(),
+                TextColumn::make('name'),
                 TextColumn::make('latestPrice.price')
                     ->label('Precio Actual')
                     ->money('BOB')
                     ->sortable()
                     ->badge()
                     ->color(function ($state) {
-                        
+
                         if ($state > 500) {
-                            return 'danger';  
+                            return 'danger';
                         }
-                
+
                         if ($state > 200) {
-                            return 'warning'; 
+                            return 'warning';
                         }
-                
-                        return 'success';     
+
+                        return 'success';
                     }),
                 TextColumn::make('presentation')
                     ->label('Presentación')
-                    ->searchable()
                     ->sortable(),
                 TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('category.name')
                     ->label('Categoria')
-                    ->searchable()
                     ->sortable(),
             ])
             ->filters([
