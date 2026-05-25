@@ -52,7 +52,7 @@ class ProductApiResource extends JsonResource
                     return [
                         'id' => $price->id,
                         'price' => (float) $price->price,
-                        'date' => $price->date, 
+                        'date' => $price->effective_date->format('d-m-Y'), 
                     ];
                 });
             }),
