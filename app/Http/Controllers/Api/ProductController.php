@@ -29,8 +29,8 @@ class ProductController extends Controller
 
         // Eager loading optimizado para rendimiento en tablas paginadas
         $query->with([
-            'category', 
-            'latestPrice', 
+            'category',
+            'latestPrice',
             'prices' => function ($q) use ($startDate, $endDate) {
                 if ($startDate) {
                     $q->whereDate('effective_date', '>=', $startDate);
@@ -38,12 +38,21 @@ class ProductController extends Controller
                 if ($endDate) {
                     $q->whereDate('effective_date', '<=', $endDate);
                 }
-                $q->orderBy('effective_date', 'asc'); 
+                $q->orderBy('effective_date', 'asc');
             }
         ]);
 
-        $products = $query->paginate(15);
+        $products = $query->paginate(100);
 
         return ProductApiResource::collection($products);
+    }
+    public function products()
+    {
+        $products = Product::with('latestPrice')->paginate(100);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $products
+        ], 200);;
     }
 }
