@@ -43,6 +43,7 @@ class ProductForm
                     ->label('Descripción'),
                 FileUpload::make('image')
                     ->label('Imagen del producto')
+                    ->disk('public')
                     ->directory('products')
                     ->image(),
                 Repeater::make('prices')
