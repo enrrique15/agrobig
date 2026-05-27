@@ -25,6 +25,7 @@ class ProductsTable
             ->columns([
                 ImageColumn::make('image')
                     ->imageHeight(40)
+                    ->disk('public')
                     ->label('Imagen')
                     ->circular(),
                 TextColumn::make('abreviation')
