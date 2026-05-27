@@ -122,4 +122,9 @@ class ProductPriceTableList extends TableWidget
                 ]),
             ]);
     }
+    public static function canView(): bool
+    {
+     
+        return false; 
+    }
 }

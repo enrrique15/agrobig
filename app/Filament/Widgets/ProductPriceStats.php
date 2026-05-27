@@ -77,4 +77,9 @@ class ProductPriceStats extends Widget
             'trendDescription' => $trendDescription,
         ];
     }
+    public static function canView(): bool
+    {
+     
+        return false; 
+    }
 }

@@ -100,4 +100,9 @@ class ProductPriceChart extends ChartWidget
             ],
         ];
     }
+    public static function canView(): bool
+    {
+     
+        return false; 
+    }
 }

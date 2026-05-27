@@ -14,7 +14,7 @@ class Dashboard extends BaseDashboard
 {
     public function getColumns(): int | array
     {
-        return 3;
+        return 1;
     }
     use HasFiltersForm;
 
