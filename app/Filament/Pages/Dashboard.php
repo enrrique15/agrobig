@@ -18,7 +18,7 @@ class Dashboard extends BaseDashboard
     }
     use HasFiltersForm;
 
-    public function filtersForm(Schema $schema): Schema
+    /*public function filtersForm(Schema $schema): Schema
     {
         return $schema
             ->components([
@@ -44,5 +44,5 @@ class Dashboard extends BaseDashboard
                     ->columns(3)
                     ->columnSpan('full'),
             ]);
-    }
+    }*/
 }
