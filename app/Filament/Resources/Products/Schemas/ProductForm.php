@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
@@ -56,6 +57,11 @@ class ProductForm
                             ->required()
                             ->prefix('Bs')
                             ->minValue(0),
+                        DatePicker::make('effective_date')
+                            ->label('Fecha de Vigencia')
+                            ->required()
+                            ->default(now()),
+
                     ])
                     ->grid(3) // Los organiza elegantemente en 3 columnas en pantallas grandes
                     ->addActionLabel('Añadir otro precio')
