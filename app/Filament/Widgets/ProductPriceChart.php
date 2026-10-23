@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ProductPriceChart extends ChartWidget
 {
     // 🚀 Cambiamos el trait para escuchar correctamente a la página del Dashboard
-    use InteractsWithPageFilters; 
+    use InteractsWithPageFilters;
 
     protected ?string $heading = 'Evolución del Precio';
     protected int | string | array $columnSpan = '2';
@@ -44,9 +44,9 @@ class ProductPriceChart extends ChartWidget
             ->get();
 
         $data = $prices->pluck('price')->toArray();
-        
+
         $labels = $prices->pluck('effective_date')->map(function ($date) {
-            return $date->format('d M Y'); 
+            return $date->format('d M Y');
         })->toArray();
 
         return [
@@ -99,10 +99,5 @@ class ProductPriceChart extends ChartWidget
                 ],
             ],
         ];
-    }
-    public static function canView(): bool
-    {
-     
-        return false; 
     }
 }

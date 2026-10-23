@@ -14,10 +14,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Agrobig',
-            'email' => 'agrobig@gmail.com',
-            'password' => Hash::make('ELsDy8m8yldRi7^H24H)Tgh9'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'agrobig@gmail.com'],
+            [
+                'name' => 'Agrobig',
+                'password' => Hash::make('1507'),
+                'role' => \App\Enums\UserRole::ADMIN,
+                'is_active' => true,
+            ]
+        );
     }
 }

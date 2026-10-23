@@ -26,14 +26,14 @@ class ProductPriceTableList extends TableWidget
                     ->imageHeight(40)
                     ->label('Imagen')
                     ->circular(),
-                
+
                 TextColumn::make('abreviation')
                     ->label('Abreviación')
                     ->sortable(),
-                
+
                 TextColumn::make('name')
                     ->label('Producto'),
-                
+
                 TextColumn::make('latestPrice.price')
                     ->label('Precio Actual')
                     ->money('BOB')
@@ -45,7 +45,7 @@ class ProductPriceTableList extends TableWidget
                     ->getStateUsing(function (Product $record) {
                         // Obtenemos los últimos 2 precios
                         $prices = $record->prices->sortByDesc('effective_date')->take(2)->values();
-                        
+
                         if ($prices->count() < 2) {
                             return '0.00%';
                         }
@@ -56,8 +56,8 @@ class ProductPriceTableList extends TableWidget
                         if ($previous == 0) return '0.00%'; // Evitar división por cero
 
                         $change = (($latest - $previous) / $previous) * 100;
-                        $prefix = $change > 0 ? '+' : ''; 
-                        
+                        $prefix = $change > 0 ? '+' : '';
+
                         return $prefix . number_format($change, 2) . '%';
                     })
                     ->badge()
@@ -72,7 +72,7 @@ class ProductPriceTableList extends TableWidget
                     ->label('Tendencia')
                     ->getStateUsing(function (Product $record) {
                         $prices = $record->prices->sortByDesc('effective_date')->take(2)->values();
-                        
+
                         if ($prices->count() < 2) return 'Estable';
 
                         $latest = $prices[0]->price;
@@ -80,29 +80,29 @@ class ProductPriceTableList extends TableWidget
 
                         if ($latest > $previous) return 'Al alza';
                         if ($latest < $previous) return 'A la baja';
-                        
+
                         return 'Estable';
                     })
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'Al alza' => 'success',
                         'A la baja' => 'danger',
                         default => 'gray',
                     })
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'Al alza' => 'heroicon-m-arrow-trending-up',
                         'A la baja' => 'heroicon-m-arrow-trending-down',
                         default => 'heroicon-m-minus',
                     }),
-                
+
                 TextColumn::make('presentation')
                     ->label('Presentación')
                     ->sortable(),
-                
+
                 TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
-                
+
                 TextColumn::make('category.name')
                     ->label('Categoria')
                     ->sortable(),
@@ -121,10 +121,5 @@ class ProductPriceTableList extends TableWidget
                     //
                 ]),
             ]);
-    }
-    public static function canView(): bool
-    {
-     
-        return false; 
     }
 }
